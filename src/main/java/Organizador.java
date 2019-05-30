@@ -26,7 +26,6 @@ import io.jenetics.util.ISeq;
 
 import static io.jenetics.engine.EvolutionResult.toBestPhenotype;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -44,10 +43,10 @@ import static java.util.Objects.requireNonNull;
  * @since 3.6
  */
 public final class Organizador
-	implements Problem<ISeq<Materia>, EnumGene<Materia>, Integer>
+	implements Problem<ISeq<Grupo>, EnumGene<Grupo>, Integer>
 {
 
-	private final ISeq<Materia> _points;
+	private final ISeq<Grupo> _points;
 
 	/**
 	 * Create a new TSP instance with the way-points we want to visit.
@@ -55,24 +54,25 @@ public final class Organizador
 	 * @param points the way-points we want to visit
 	 * @throws NullPointerException if the given {@code points} seq is {@code null}
 	 */
-	public Organizador(final ISeq<Materia> points) {
+	public Organizador(final ISeq<Grupo> points) {
 		_points = requireNonNull(points);
 	}
 
 	@Override
-	public Codec<ISeq<Materia>, EnumGene<Materia>> codec() {
+	public Codec<ISeq<Grupo>, EnumGene<Grupo>> codec() {
 		return Codecs.ofSubSet(_points,3);
 	}
 
 	@Override
-	public Function<ISeq<Materia>, Integer> fitness() {
+	public Function<ISeq<Grupo>, Integer> fitness() {
 		return horario ->{
 			int a = 1;
-			for (Materia mat: horario
+			for (Grupo mat: horario
 				 ) {
 				a += mat.choques(horario);
+				a += mat.comparar(horario);
 			}
-			return 0-a;
+			return -a;
 		};
 	}
 
@@ -80,7 +80,7 @@ public final class Organizador
 		final Organizador tsm =
 			new Organizador(grupos());
 
-		final Engine<EnumGene<Materia>, Integer> engine = Engine.builder(tsm)
+		final Engine<EnumGene<Grupo>, Integer> engine = Engine.builder(tsm)
 			.optimize(Optimize.MINIMUM)
 			.alterers(
 				new SwapMutator<>(0.15),
@@ -91,7 +91,7 @@ public final class Organizador
 		final EvolutionStatistics<Integer, ?>
 			statistics = EvolutionStatistics.ofNumber();
 
-		final Phenotype<EnumGene<Materia>, Integer> best = engine.stream()
+		final Phenotype<EnumGene<Grupo>, Integer> best = engine.stream()
 			.limit(1_000)
 			.peek(statistics)
 			.collect(toBestPhenotype());
@@ -104,34 +104,34 @@ public final class Organizador
 	}
 
 	// Return the district capitals, we want to visit.
-	private static ISeq<Materia> grupos() throws IOException {
-		ISeq<Materia> materias = new ArrayISeq<>( Array.ofLength(0));
+	private static ISeq<Grupo> grupos() throws IOException {
+		ISeq<Grupo> materias = new ArrayISeq<>( Array.ofLength(0));
 		ArrayList<Periodo> periodos = new ArrayList<>();
 		periodos.add(new Periodo("lunes",new Time(1110000), new Time(1200000)));
 		periodos.add(new Periodo("martes",new Time(1110000), new Time(120000)));
 		periodos.add(new Periodo("viernes",new Time(1110000), new Time(1200000)));
-		materias = materias.append(new Materia(periodos));
+		materias = materias.append(new Grupo(periodos, "intro"));
 		periodos = new ArrayList<>();
 		periodos.add(new Periodo("lunes",new Time(1050000), new Time(1100000)));
 		periodos.add(new Periodo("martes",new Time(1050000), new Time(1100000)));
 		periodos.add(new Periodo("viernes",new Time(1050000), new Time(1100000)));
-		materias = materias.append(new Materia(periodos));
+		materias = materias.append(new Grupo(periodos, "intro"));
 		periodos = new ArrayList<>();
 		periodos.add(new Periodo("lunes",new Time(1110000), new Time(1200000)));
 		periodos.add(new Periodo("martes",new Time(1110000), new Time(1200000)));
 		periodos.add(new Periodo("viernes",new Time(1110000), new Time(1200000)));
-		materias = materias.append(new Materia(periodos));
+		materias = materias.append(new Grupo(periodos, "elementos"));
 		periodos = new ArrayList<>();
 		periodos.add(new Periodo("lunes",new Time(1210000), new Time(1300000)));
 		periodos.add(new Periodo("martes",new Time(1210000), new Time(1300000)));
 		periodos.add(new Periodo("viernes",new Time(1210000), new Time(1300000)));
-		materias = materias.append(new Materia(periodos));
+		materias = materias.append(new Grupo(periodos,"calculo"));
 		periodos = new ArrayList<>();
 
 		periodos.add(new Periodo("lunes",new Time(1210000), new Time(1300000)));
 		periodos.add(new Periodo("martes",new Time(1210000), new Time(1300000)));
 		periodos.add(new Periodo("viernes",new Time(1210000), new Time(1300000)));
-		materias = materias.append(new Materia(periodos));
+		materias = materias.append(new Grupo(periodos,"algoritmos"));
 		return materias;
 	}
 
