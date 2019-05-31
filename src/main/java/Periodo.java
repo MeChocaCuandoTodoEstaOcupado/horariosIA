@@ -12,13 +12,17 @@ public class Periodo {
 		this.fin = fin;
 	}
 
+	public String getDia() {
+		return dia;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (!(o instanceof Periodo)) return false;
 		Periodo periodo = (Periodo) o;
 
-		return (inicio.getTime() > periodo.fin.getTime() || periodo.inicio.getTime() > fin.getTime()) &&
+		return (inicio.getTime() >= periodo.fin.getTime() || periodo.inicio.getTime() >= fin.getTime()) &&
 			dia.equals(periodo.dia);
 	}
 
@@ -34,5 +38,9 @@ public class Periodo {
 			", fin=" + fin +
 			", dia='" + dia + '\'' +
 			'}';
+	}
+
+	public String intervalo(){
+		return inicio+"-"+fin;
 	}
 }

@@ -9,6 +9,9 @@ public class Grupo {
 		this.periodos = periodos;
 		this.materia = materia;
 	}
+	public String getMateria(){
+		return materia;
+	}
 
 	public Collection<Periodo> getPeriodos(){
 		return this.periodos;

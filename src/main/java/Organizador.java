@@ -76,61 +76,37 @@ public final class Organizador
 		};
 	}
 
-	public static void main(String[] args) throws IOException {
-		final Organizador tsm =
-			new Organizador(grupos());
-
-		final Engine<EnumGene<Grupo>, Integer> engine = Engine.builder(tsm)
-			.optimize(Optimize.MINIMUM)
-			.alterers(
-				new SwapMutator<>(0.15),
-				new PartiallyMatchedCrossover<>(0.15))
-			.build();
-
-		// Create evolution statistics consumer.
-		final EvolutionStatistics<Integer, ?>
-			statistics = EvolutionStatistics.ofNumber();
-
-		final Phenotype<EnumGene<Grupo>, Integer> best = engine.stream()
-			.limit(1_000)
-			.peek(statistics)
-			.collect(toBestPhenotype());
 
 
-
-		System.out.println(statistics);
-		System.out.println(best.getFitness());
-		best.getGenotype().getChromosome().stream().forEach(a->System.out.println(a));
-	}
 
 	// Return the district capitals, we want to visit.
-	private static ISeq<Grupo> grupos() throws IOException {
+	public static ISeq<Grupo> grupos() throws IOException {
 		ISeq<Grupo> materias = new ArrayISeq<>( Array.ofLength(0));
 		ArrayList<Periodo> periodos = new ArrayList<>();
-		periodos.add(new Periodo("lunes",new Time(1110000), new Time(1200000)));
-		periodos.add(new Periodo("martes",new Time(1110000), new Time(120000)));
-		periodos.add(new Periodo("viernes",new Time(1110000), new Time(1200000)));
+		periodos.add(new Periodo("lunes",new Time(6,45,0), new Time(8,15,0)));
+		periodos.add(new Periodo("martes",new Time(6,45,0), new Time(8,15,0)));
+		periodos.add(new Periodo("viernes",new Time(6,45,0), new Time(8,15,0)));
 		materias = materias.append(new Grupo(periodos, "intro"));
 		periodos = new ArrayList<>();
-		periodos.add(new Periodo("lunes",new Time(1050000), new Time(1100000)));
-		periodos.add(new Periodo("martes",new Time(1050000), new Time(1100000)));
-		periodos.add(new Periodo("viernes",new Time(1050000), new Time(1100000)));
+		periodos.add(new Periodo("Lunes",new Time(8,15,0), new Time(9,45,0)));
+		periodos.add(new Periodo("Martes",new Time(8,15,0), new Time(9,45,0)));
+		periodos.add(new Periodo("Viernes",new Time(8,15,0), new Time(9,45,0)));
 		materias = materias.append(new Grupo(periodos, "intro"));
 		periodos = new ArrayList<>();
-		periodos.add(new Periodo("lunes",new Time(1110000), new Time(1200000)));
-		periodos.add(new Periodo("martes",new Time(1110000), new Time(1200000)));
-		periodos.add(new Periodo("viernes",new Time(1110000), new Time(1200000)));
+		periodos.add(new Periodo("Lunes",new Time(6,45,0), new Time(8,15,0)));
+		periodos.add(new Periodo("Martes",new Time(6,45,0), new Time(8,15,0)));
+		periodos.add(new Periodo("Viernes",new Time(6,45,0), new Time(8,15,0)));
 		materias = materias.append(new Grupo(periodos, "elementos"));
 		periodos = new ArrayList<>();
-		periodos.add(new Periodo("lunes",new Time(1210000), new Time(1300000)));
-		periodos.add(new Periodo("martes",new Time(1210000), new Time(1300000)));
-		periodos.add(new Periodo("viernes",new Time(1210000), new Time(1300000)));
+		periodos.add(new Periodo("Lunes",new Time(9,45,0), new Time(11,15,0)));
+		periodos.add(new Periodo("Martes",new Time(9,45,0), new Time(11,15,0)));
+		periodos.add(new Periodo("Viernes",new Time(9,45,0), new Time(11,15,0)));
 		materias = materias.append(new Grupo(periodos,"calculo"));
 		periodos = new ArrayList<>();
 
-		periodos.add(new Periodo("lunes",new Time(1210000), new Time(1300000)));
-		periodos.add(new Periodo("martes",new Time(1210000), new Time(1300000)));
-		periodos.add(new Periodo("viernes",new Time(1210000), new Time(1300000)));
+		periodos.add(new Periodo("Lunes",new Time(9,45,0), new Time(11,15,0)));
+		periodos.add(new Periodo("Martes",new Time(9,45,0), new Time(11,15,0)));
+		periodos.add(new Periodo("Viernes",new Time(9,45,0), new Time(11,15,0)));
 		materias = materias.append(new Grupo(periodos,"algoritmos"));
 		return materias;
 	}
