@@ -47,6 +47,7 @@ public final class Organizador
 {
 
 	private final ISeq<Grupo> _points;
+	private int numMaterias=3;
 
 	/**
 	 * Create a new TSP instance with the way-points we want to visit.
@@ -58,9 +59,13 @@ public final class Organizador
 		_points = requireNonNull(points);
 	}
 
+	public void setNumMaterias(int numMaterias) {
+		this.numMaterias = numMaterias;
+	}
+
 	@Override
 	public Codec<ISeq<Grupo>, EnumGene<Grupo>> codec() {
-		return Codecs.ofSubSet(_points,3);
+		return Codecs.ofSubSet(_points,numMaterias);
 	}
 
 	@Override

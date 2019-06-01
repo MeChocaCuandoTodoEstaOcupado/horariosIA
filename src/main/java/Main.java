@@ -40,13 +40,8 @@ import static java.util.Objects.requireNonNull;
  * @since 3.6
  */
 public final class Main extends Application {
-	static  EvolutionStatistics<Integer, ?>  statistics;
 
 	public static void main(String[] args) throws IOException {
-
-		final Phenotype<EnumGene<Grupo>, Integer> best = evolucionar();
-		System.out.println(best.getFitness());
-		best.getGenotype().getChromosome().stream().forEach(a->System.out.println(a));
 		launch(args);
 	}
 
@@ -56,28 +51,6 @@ public final class Main extends Application {
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
-	}
-
-	public static Phenotype<EnumGene<Grupo>, Integer> evolucionar() throws IOException {
-		final Organizador tsm =
-				new Organizador(Organizador.grupos());
-
-		final Engine<EnumGene<Grupo>, Integer> engine = Engine.builder(tsm)
-				.optimize(Optimize.MINIMUM)
-				.alterers(
-						new SwapMutator<>(0.15),
-						new PartiallyMatchedCrossover<>(0.15))
-				.build();
-
-		// Create evolution statistics consumer.
-		statistics = EvolutionStatistics.ofNumber();
-
-		final Phenotype<EnumGene<Grupo>, Integer> best = engine.stream()
-				.limit(1_000)
-				.peek(statistics)
-				.collect(toBestPhenotype());
-		System.out.println(statistics);
-		return best;
 	}
 
 }

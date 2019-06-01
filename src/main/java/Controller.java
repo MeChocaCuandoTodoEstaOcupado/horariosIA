@@ -41,7 +41,7 @@ public class Controller implements Initializable{
             gridMines.add(label, 0, i+1);
         }
         try {
-            Phenotype<EnumGene<Grupo>, Integer> best = Main.evolucionar();
+            Phenotype<EnumGene<Grupo>, Integer> best = Evolucionador.evolucionar(3);
             System.out.println(best.getFitness());
             best.getGenotype().getChromosome().stream().forEach(a->{
                 a.getAllele().getPeriodos().stream().forEach(p->{
